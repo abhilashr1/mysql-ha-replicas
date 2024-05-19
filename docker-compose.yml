@@ -67,6 +67,7 @@ services:
     container_name: haproxy
     ports:
       - "3306:3306"
+      - "2999:2999"
     volumes:
       - ./ha-proxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
     networks:

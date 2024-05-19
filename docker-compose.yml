@@ -1,0 +1,84 @@
+version: '3.7'
+
+services:
+  mysql-master:
+    image: mysql:8.0
+    container_name: mysql-master
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: mydb
+      MYSQL_ROOT_HOST: '%'
+    volumes:
+      - master-data:/var/lib/mysql
+      - ./master.cnf:/etc/mysql/conf.d/master.cnf
+    networks:
+      - mysql_net
+
+  mysql-replica1:
+    image: mysql:8.0
+    container_name: mysql-replica1
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: mydb
+    volumes:
+      - replica1-data:/var/lib/mysql
+      - ./replica1.cnf:/etc/mysql/conf.d/replica1.cnf
+    networks:
+      - mysql_net
+
+  mysql-replica2:
+    image: mysql:8.0
+    container_name: mysql-replica2
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: mydb
+    volumes:
+      - replica2-data:/var/lib/mysql
+      - ./replica2.cnf:/etc/mysql/conf.d/replica2.cnf
+    networks:
+      - mysql_net
+
+  mysql-replica3:
+    image: mysql:8.0
+    container_name: mysql-replica3
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: mydb
+    volumes:
+      - replica3-data:/var/lib/mysql
+      - ./replica3.cnf:/etc/mysql/conf.d/replica3.cnf
+    networks:
+      - mysql_net
+
+  mysql-replica4:
+    image: mysql:8.0
+    container_name: mysql-replica4
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: mydb
+    volumes:
+      - replica4-data:/var/lib/mysql
+      - ./replica4.cnf:/etc/mysql/conf.d/replica4.cnf
+    networks:
+      - mysql_net
+
+  haproxy:
+    image: haproxy:latest
+    container_name: haproxy
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./ha-proxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    networks:
+      - mysql_net
+
+volumes:
+  master-data:
+  replica1-data:
+  replica2-data:
+  replica3-data:
+  replica4-data:
+
+networks:
+  mysql_net:
+    driver: bridge
